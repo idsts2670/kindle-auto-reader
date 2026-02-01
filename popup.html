@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <!-- Status Section -->
+    <div id="status-section" class="section">
+      <div id="domain-status" class="status-indicator"></div>
+    </div>
+
+    <!-- Recovery Banner -->
+    <div id="recovery-banner" class="banner hidden">
+      <span id="recovery-message"></span>
+      <div class="banner-actions">
+        <button id="btn-resume" class="btn btn-small"></button>
+        <button id="btn-build-partial" class="btn btn-small"></button>
+        <button id="btn-delete-recovery" class="btn btn-small btn-danger"></button>
+      </div>
+    </div>
+
+    <!-- Confirmation Section -->
+    <div id="confirmation-section" class="section">
+      <label class="checkbox-label">
+        <input type="checkbox" id="confirm-rights">
+        <span data-i18n="confirmRights"></span>
+      </label>
+    </div>
+
+    <!-- Mode Section -->
+    <div id="mode-section" class="section">
+      <div class="mode-tabs">
+        <button class="mode-tab active" data-mode="keyboard" data-i18n="modeKeyboard"></button>
+        <button class="mode-tab" data-mode="click" data-i18n="modeClick"></button>
+        <button class="mode-tab" data-mode="scroll" data-i18n="modeScroll"></button>
+      </div>
+
+      <!-- Keyboard mode options -->
+      <div id="keyboard-options" class="mode-options">
+        <label>
+          <span data-i18n="keyLabel"></span>
+          <select id="key-select">
+            <option value="ArrowRight">ArrowRight</option>
+            <option value="ArrowLeft">ArrowLeft</option>
+            <option value="ArrowDown">ArrowDown</option>
+            <option value="ArrowUp">ArrowUp</option>
+            <option value="Space">Space</option>
+            <option value="Enter">Enter</option>
+            <option value="PageDown">PageDown</option>
+            <option value="PageUp">PageUp</option>
+          </select>
+        </label>
+      </div>
+
+      <!-- Click mode options -->
+      <div id="click-options" class="mode-options hidden">
+        <label>
+          <span data-i18n="selectorLabel"></span>
+          <input type="text" id="next-selector" placeholder=".next-button">
+        </label>
+      </div>
+
+      <!-- Scroll mode options -->
+      <div id="scroll-options" class="mode-options hidden">
+        <p class="hint">Scrolls down by viewport height</p>
+      </div>
+    </div>
+
+    <!-- Control Buttons -->
+    <div id="control-section" class="section">
+      <button id="btn-start" class="btn btn-primary" data-i18n="startCapture"></button>
+      <button id="btn-stop" class="btn btn-danger hidden" data-i18n="stopCapture"></button>
+    </div>
+
+    <!-- Progress Section -->
+    <div id="progress-section" class="section hidden">
+      <div class="progress-item">
+        <span id="progress-pages"></span>
+      </div>
+      <div class="progress-item">
+        <span id="progress-elapsed"></span>
+      </div>
+      <div class="progress-item">
+        <span id="progress-avg"></span>
+      </div>
+      <div class="progress-item" id="progress-remaining-row">
+        <span id="progress-remaining"></span>
+      </div>
+      <div id="paused-notice" class="notice hidden" data-i18n="capturePaused"></div>
+    </div>
+
+    <!-- Advanced Settings -->
+    <details id="advanced-section" class="section">
+      <summary data-i18n="advancedSettings"></summary>
+      <div class="advanced-content">
+        <label>
+          <span data-i18n="maxPages"></span>
+          <input type="number" id="max-pages" value="200" min="1" max="1000">
+        </label>
+        <label>
+          <span data-i18n="delayMs"></span>
+          <input type="number" id="delay-ms" value="700" min="100" max="5000" step="100">
+        </label>
+        <label>
+          <span data-i18n="waitSelector"></span>
+          <input type="text" id="wait-selector" placeholder="">
+        </label>
+        <label>
+          <span data-i18n="endSelector"></span>
+          <input type="text" id="end-selector" placeholder="">
+        </label>
+        <label>
+          <span data-i18n="duplicateTolerance"></span>
+          <input type="number" id="duplicate-tolerance" value="3" min="1" max="10">
+        </label>
+        <label>
+          <span data-i18n="quality"></span>
+          <input type="range" id="quality" min="0.5" max="1" step="0.1" value="0.8">
+          <span id="quality-value">0.8</span>
+        </label>
+        <label>
+          <span data-i18n="pageSize"></span>
+          <select id="page-size">
+            <option value="auto" data-i18n="pageSizeAuto"></option>
+            <option value="A4" data-i18n="pageSizeA4"></option>
+            <option value="Letter" data-i18n="pageSizeLetter"></option>
+          </select>
+        </label>
+      </div>
+    </details>
+
+    <!-- Export Section -->
+    <div id="export-section" class="section hidden">
+      <button id="btn-download" class="btn btn-primary" data-i18n="downloadPdf"></button>
+      <button id="btn-upload" class="btn hidden" data-i18n="uploadPdf"></button>
+    </div>
+
+    <!-- Stop Prompt -->
+    <div id="stop-prompt" class="modal hidden">
+      <div class="modal-content">
+        <p id="stop-prompt-message"></p>
+        <div class="modal-actions">
+          <button id="btn-build-pdf" class="btn btn-primary" data-i18n="buildPdf"></button>
+          <button id="btn-discard" class="btn btn-danger" data-i18n="discardCapture"></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Status Messages -->
+    <div id="status-message" class="status-message hidden"></div>
+  </div>
+
+  <script src="popup.js" type="module"></script>
+</body>
+</html>

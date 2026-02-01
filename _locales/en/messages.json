@@ -1,0 +1,311 @@
+{
+  "extName": {
+    "message": "Auto Page Capture to PDF"
+  },
+  "extDescription": {
+    "message": "Capture paginated web content as PDF with automated page turning"
+  },
+  "statusEnabled": {
+    "message": "Enabled on this site"
+  },
+  "statusDisabled": {
+    "message": "Disabled - not in allowlist"
+  },
+  "statusBlocked": {
+    "message": "Blocked - protected site"
+  },
+  "confirmRights": {
+    "message": "I confirm I have rights to capture this content"
+  },
+  "modeKeyboard": {
+    "message": "Keyboard"
+  },
+  "modeClick": {
+    "message": "Click"
+  },
+  "modeScroll": {
+    "message": "Scroll"
+  },
+  "keyLabel": {
+    "message": "Key"
+  },
+  "selectorLabel": {
+    "message": "Next button selector"
+  },
+  "startCapture": {
+    "message": "Start Capture"
+  },
+  "stopCapture": {
+    "message": "Stop"
+  },
+  "downloadPdf": {
+    "message": "Download PDF"
+  },
+  "uploadPdf": {
+    "message": "Upload PDF"
+  },
+  "progressPages": {
+    "message": "Pages: $COUNT$",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "progressElapsed": {
+    "message": "Elapsed: $TIME$",
+    "placeholders": {
+      "time": { "content": "$1" }
+    }
+  },
+  "progressAvg": {
+    "message": "Avg: $TIME$/page",
+    "placeholders": {
+      "time": { "content": "$1" }
+    }
+  },
+  "progressRemaining": {
+    "message": "Est. remaining: $TIME$",
+    "placeholders": {
+      "time": { "content": "$1" }
+    }
+  },
+  "advancedSettings": {
+    "message": "Advanced Settings"
+  },
+  "maxPages": {
+    "message": "Max pages"
+  },
+  "delayMs": {
+    "message": "Delay after page turn (ms)"
+  },
+  "waitSelector": {
+    "message": "Wait for selector"
+  },
+  "endSelector": {
+    "message": "End selector"
+  },
+  "duplicateTolerance": {
+    "message": "Stop after N duplicates"
+  },
+  "quality": {
+    "message": "Quality"
+  },
+  "pageSize": {
+    "message": "Page size"
+  },
+  "pageSizeAuto": {
+    "message": "Auto (match image)"
+  },
+  "pageSizeA4": {
+    "message": "A4"
+  },
+  "pageSizeLetter": {
+    "message": "Letter"
+  },
+  "optionsTitle": {
+    "message": "Auto Page Capture - Options"
+  },
+  "tabCapture": {
+    "message": "Capture"
+  },
+  "tabOutput": {
+    "message": "Output"
+  },
+  "tabUpload": {
+    "message": "Upload"
+  },
+  "tabDomains": {
+    "message": "Domains"
+  },
+  "allowlistTitle": {
+    "message": "Allowed Domains"
+  },
+  "allowlistDesc": {
+    "message": "Add domains where capture is allowed. Subdomains are included automatically."
+  },
+  "blocklistTitle": {
+    "message": "Blocked Domains"
+  },
+  "blocklistDesc": {
+    "message": "These domains are blocked and cannot be removed."
+  },
+  "addDomain": {
+    "message": "Add"
+  },
+  "removeDomain": {
+    "message": "Remove"
+  },
+  "uploadEnabled": {
+    "message": "Enable upload"
+  },
+  "uploadEndpoint": {
+    "message": "Endpoint URL"
+  },
+  "uploadAuthHeader": {
+    "message": "Auth header name"
+  },
+  "uploadAuthToken": {
+    "message": "Auth token"
+  },
+  "uploadMethod": {
+    "message": "Upload method"
+  },
+  "uploadMethodPost": {
+    "message": "POST multipart"
+  },
+  "uploadMethodPut": {
+    "message": "PUT raw body"
+  },
+  "filenameTemplate": {
+    "message": "Filename template"
+  },
+  "filenameHelp": {
+    "message": "Variables: {title}, {date}, {time}, {domain}, {pageCount}"
+  },
+  "saveSettings": {
+    "message": "Save Settings"
+  },
+  "settingsSaved": {
+    "message": "Settings saved"
+  },
+  "errorBlankCapture": {
+    "message": "Blank capture detected - page may be protected or not fully loaded"
+  },
+  "errorSelectorNotFound": {
+    "message": "Selector '$SELECTOR$' not found",
+    "placeholders": {
+      "selector": { "content": "$1" }
+    }
+  },
+  "errorNotAllowlisted": {
+    "message": "This domain is not in your allowlist"
+  },
+  "errorBlocked": {
+    "message": "This domain is blocked"
+  },
+  "errorNoConfirmation": {
+    "message": "Please confirm you have rights to capture this content"
+  },
+  "promptStopCapture": {
+    "message": "Build PDF from $COUNT$ captured pages, or discard?",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "buildPdf": {
+    "message": "Build PDF"
+  },
+  "discardCapture": {
+    "message": "Discard"
+  },
+  "capturePaused": {
+    "message": "Capture paused - return to tab to continue"
+  },
+  "captureComplete": {
+    "message": "Capture complete"
+  },
+  "duplicateStop": {
+    "message": "Stopped: $COUNT$ consecutive duplicate pages detected",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "endReached": {
+    "message": "End of content reached"
+  },
+  "uploadSuccess": {
+    "message": "Upload successful"
+  },
+  "uploadFailed": {
+    "message": "Upload failed: $ERROR$. PDF saved locally.",
+    "placeholders": {
+      "error": { "content": "$1" }
+    }
+  },
+  "recoveryFound": {
+    "message": "Incomplete capture found ($COUNT$ pages). Resume or build partial PDF?",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "resume": {
+    "message": "Resume"
+  },
+  "buildPartial": {
+    "message": "Build Partial PDF"
+  },
+  "deleteRecovery": {
+    "message": "Delete"
+  },
+  "validatingEndpoint": {
+    "message": "Validating endpoint..."
+  },
+  "endpointValid": {
+    "message": "Endpoint validated"
+  },
+  "endpointInvalid": {
+    "message": "Invalid endpoint: $ERROR$",
+    "placeholders": {
+      "error": { "content": "$1" }
+    }
+  },
+  "tabOcr": {
+    "message": "OCR"
+  },
+  "ocrEnable": {
+    "message": "Enable OCR (create searchable PDFs)"
+  },
+  "ocrCheckingDeps": {
+    "message": "Checking dependencies..."
+  },
+  "ocrDepsOk": {
+    "message": "Dependencies OK"
+  },
+  "ocrDepsMissing": {
+    "message": "Dependencies missing"
+  },
+  "ocrEngine": {
+    "message": "OCR Engine"
+  },
+  "ocrEngineHelp": {
+    "message": "Apple Vision has better Japanese text recognition on macOS"
+  },
+  "ocrLanguages": {
+    "message": "OCR Languages"
+  },
+  "ocrLanguagesHelp": {
+    "message": "Select the languages in your PDFs for better recognition"
+  },
+  "ocrLanguagesAvailable": {
+    "message": "Languages"
+  },
+  "ocrDeskew": {
+    "message": "Deskew pages (straighten tilted scans)"
+  },
+  "ocrOptimize": {
+    "message": "Optimization level"
+  },
+  "ocrOptimizeHelp": {
+    "message": "0=none, 1=lossless, 2=lossy, 3=aggressive (smaller file)"
+  },
+  "ocrInstallTitle": {
+    "message": "Installation Required"
+  },
+  "ocrInstallDesc": {
+    "message": "OCR requires additional software to be installed:"
+  },
+  "ocrInstallScript": {
+    "message": "Then run the install script:"
+  },
+  "ocrProcessing": {
+    "message": "Processing OCR..."
+  },
+  "ocrComplete": {
+    "message": "OCR complete - searchable PDF created"
+  },
+  "ocrFailed": {
+    "message": "OCR failed: $ERROR$",
+    "placeholders": {
+      "error": { "content": "$1" }
+    }
+  }
+}

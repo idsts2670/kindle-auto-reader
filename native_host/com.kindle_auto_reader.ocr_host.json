@@ -1,0 +1,9 @@
+{
+  "name": "com.kindle_auto_reader.ocr_host",
+  "description": "OCR Native Messaging Host for Kindle Auto Reader",
+  "path": "/PLACEHOLDER_PATH/ocr_host.py",
+  "type": "stdio",
+  "allowed_origins": [
+    "chrome-extension://PLACEHOLDER_EXTENSION_ID/"
+  ]
+}

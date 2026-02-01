@@ -1,0 +1,15 @@
+# OCR Native Host Python Dependencies
+# Install with: pip3 install --user -r requirements.txt
+
+# Apple Vision OCR plugin for ocrmypdf (recommended for Japanese)
+ocrmypdf-appleocr>=0.3.1
+
+# Note: ocrmypdf-appleocr will automatically install these dependencies:
+# - ocrmypdf>=14.2.1
+# - pyobjc-core
+# - pyobjc-framework-Vision
+# - pyobjc-framework-Cocoa
+# - pyobjc-framework-Quartz
+# - pyobjc-framework-CoreML
+# - pikepdf
+# - Pillow

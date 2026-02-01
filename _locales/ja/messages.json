@@ -1,0 +1,311 @@
+{
+  "extName": {
+    "message": "Auto Page Capture to PDF"
+  },
+  "extDescription": {
+    "message": "ページ送りを自動化してウェブコンテンツをPDFとしてキャプチャ"
+  },
+  "statusEnabled": {
+    "message": "このサイトで有効"
+  },
+  "statusDisabled": {
+    "message": "無効 - 許可リストにありません"
+  },
+  "statusBlocked": {
+    "message": "ブロック - 保護されたサイト"
+  },
+  "confirmRights": {
+    "message": "このコンテンツをキャプチャする権利があることを確認します"
+  },
+  "modeKeyboard": {
+    "message": "キーボード"
+  },
+  "modeClick": {
+    "message": "クリック"
+  },
+  "modeScroll": {
+    "message": "スクロール"
+  },
+  "keyLabel": {
+    "message": "キー"
+  },
+  "selectorLabel": {
+    "message": "次へボタンのセレクター"
+  },
+  "startCapture": {
+    "message": "キャプチャ開始"
+  },
+  "stopCapture": {
+    "message": "停止"
+  },
+  "downloadPdf": {
+    "message": "PDFをダウンロード"
+  },
+  "uploadPdf": {
+    "message": "PDFをアップロード"
+  },
+  "progressPages": {
+    "message": "ページ数: $COUNT$",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "progressElapsed": {
+    "message": "経過時間: $TIME$",
+    "placeholders": {
+      "time": { "content": "$1" }
+    }
+  },
+  "progressAvg": {
+    "message": "平均: $TIME$/ページ",
+    "placeholders": {
+      "time": { "content": "$1" }
+    }
+  },
+  "progressRemaining": {
+    "message": "残り時間: $TIME$",
+    "placeholders": {
+      "time": { "content": "$1" }
+    }
+  },
+  "advancedSettings": {
+    "message": "詳細設定"
+  },
+  "maxPages": {
+    "message": "最大ページ数"
+  },
+  "delayMs": {
+    "message": "ページ送り後の遅延 (ms)"
+  },
+  "waitSelector": {
+    "message": "待機セレクター"
+  },
+  "endSelector": {
+    "message": "終了セレクター"
+  },
+  "duplicateTolerance": {
+    "message": "重複N回で停止"
+  },
+  "quality": {
+    "message": "品質"
+  },
+  "pageSize": {
+    "message": "ページサイズ"
+  },
+  "pageSizeAuto": {
+    "message": "自動（画像に合わせる）"
+  },
+  "pageSizeA4": {
+    "message": "A4"
+  },
+  "pageSizeLetter": {
+    "message": "レター"
+  },
+  "optionsTitle": {
+    "message": "Auto Page Capture - 設定"
+  },
+  "tabCapture": {
+    "message": "キャプチャ"
+  },
+  "tabOutput": {
+    "message": "出力"
+  },
+  "tabUpload": {
+    "message": "アップロード"
+  },
+  "tabDomains": {
+    "message": "ドメイン"
+  },
+  "allowlistTitle": {
+    "message": "許可ドメイン"
+  },
+  "allowlistDesc": {
+    "message": "キャプチャを許可するドメインを追加してください。サブドメインは自動的に含まれます。"
+  },
+  "blocklistTitle": {
+    "message": "ブロックドメイン"
+  },
+  "blocklistDesc": {
+    "message": "これらのドメインはブロックされており、削除できません。"
+  },
+  "addDomain": {
+    "message": "追加"
+  },
+  "removeDomain": {
+    "message": "削除"
+  },
+  "uploadEnabled": {
+    "message": "アップロードを有効にする"
+  },
+  "uploadEndpoint": {
+    "message": "エンドポイントURL"
+  },
+  "uploadAuthHeader": {
+    "message": "認証ヘッダー名"
+  },
+  "uploadAuthToken": {
+    "message": "認証トークン"
+  },
+  "uploadMethod": {
+    "message": "アップロード方式"
+  },
+  "uploadMethodPost": {
+    "message": "POST マルチパート"
+  },
+  "uploadMethodPut": {
+    "message": "PUT 生データ"
+  },
+  "filenameTemplate": {
+    "message": "ファイル名テンプレート"
+  },
+  "filenameHelp": {
+    "message": "変数: {title}, {date}, {time}, {domain}, {pageCount}"
+  },
+  "saveSettings": {
+    "message": "設定を保存"
+  },
+  "settingsSaved": {
+    "message": "設定を保存しました"
+  },
+  "errorBlankCapture": {
+    "message": "空白のキャプチャを検出 - ページが保護されているか、完全に読み込まれていない可能性があります"
+  },
+  "errorSelectorNotFound": {
+    "message": "セレクター '$SELECTOR$' が見つかりません",
+    "placeholders": {
+      "selector": { "content": "$1" }
+    }
+  },
+  "errorNotAllowlisted": {
+    "message": "このドメインは許可リストにありません"
+  },
+  "errorBlocked": {
+    "message": "このドメインはブロックされています"
+  },
+  "errorNoConfirmation": {
+    "message": "このコンテンツをキャプチャする権利があることを確認してください"
+  },
+  "promptStopCapture": {
+    "message": "$COUNT$ ページをキャプチャしました。PDFを作成しますか、それとも破棄しますか？",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "buildPdf": {
+    "message": "PDFを作成"
+  },
+  "discardCapture": {
+    "message": "破棄"
+  },
+  "capturePaused": {
+    "message": "キャプチャ一時停止 - タブに戻ると続行します"
+  },
+  "captureComplete": {
+    "message": "キャプチャ完了"
+  },
+  "duplicateStop": {
+    "message": "停止: $COUNT$ 回連続で重複ページを検出",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "endReached": {
+    "message": "コンテンツの終わりに到達しました"
+  },
+  "uploadSuccess": {
+    "message": "アップロード成功"
+  },
+  "uploadFailed": {
+    "message": "アップロード失敗: $ERROR$。PDFはローカルに保存されました。",
+    "placeholders": {
+      "error": { "content": "$1" }
+    }
+  },
+  "recoveryFound": {
+    "message": "未完了のキャプチャが見つかりました（$COUNT$ ページ）。再開するか、部分的なPDFを作成しますか？",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "resume": {
+    "message": "再開"
+  },
+  "buildPartial": {
+    "message": "部分PDFを作成"
+  },
+  "deleteRecovery": {
+    "message": "削除"
+  },
+  "validatingEndpoint": {
+    "message": "エンドポイントを検証中..."
+  },
+  "endpointValid": {
+    "message": "エンドポイント検証完了"
+  },
+  "endpointInvalid": {
+    "message": "無効なエンドポイント: $ERROR$",
+    "placeholders": {
+      "error": { "content": "$1" }
+    }
+  },
+  "tabOcr": {
+    "message": "OCR"
+  },
+  "ocrEnable": {
+    "message": "OCRを有効にする（検索可能なPDFを作成）"
+  },
+  "ocrCheckingDeps": {
+    "message": "依存関係を確認中..."
+  },
+  "ocrDepsOk": {
+    "message": "依存関係OK"
+  },
+  "ocrDepsMissing": {
+    "message": "依存関係が不足しています"
+  },
+  "ocrEngine": {
+    "message": "OCRエンジン"
+  },
+  "ocrEngineHelp": {
+    "message": "Apple Visionは日本語テキスト認識に優れています（macOS専用）"
+  },
+  "ocrLanguages": {
+    "message": "OCR言語"
+  },
+  "ocrLanguagesHelp": {
+    "message": "PDFの言語を選択して認識精度を向上させます"
+  },
+  "ocrLanguagesAvailable": {
+    "message": "利用可能な言語"
+  },
+  "ocrDeskew": {
+    "message": "ページの傾き補正（スキャンの傾きを修正）"
+  },
+  "ocrOptimize": {
+    "message": "最適化レベル"
+  },
+  "ocrOptimizeHelp": {
+    "message": "0=なし、1=ロスレス、2=非可逆、3=積極的（ファイルサイズ縮小）"
+  },
+  "ocrInstallTitle": {
+    "message": "インストールが必要です"
+  },
+  "ocrInstallDesc": {
+    "message": "OCRには追加ソフトウェアのインストールが必要です："
+  },
+  "ocrInstallScript": {
+    "message": "次にインストールスクリプトを実行してください："
+  },
+  "ocrProcessing": {
+    "message": "OCR処理中..."
+  },
+  "ocrComplete": {
+    "message": "OCR完了 - 検索可能なPDFを作成しました"
+  },
+  "ocrFailed": {
+    "message": "OCR失敗: $ERROR$",
+    "placeholders": {
+      "error": { "content": "$1" }
+    }
+  }
+}

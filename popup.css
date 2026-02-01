@@ -1,0 +1,350 @@
+/* Popup Styles */
+:root {
+  --primary-color: #4285f4;
+  --primary-hover: #3367d6;
+  --danger-color: #ea4335;
+  --danger-hover: #c5221f;
+  --success-color: #34a853;
+  --warning-color: #fbbc04;
+  --text-color: #202124;
+  --text-secondary: #5f6368;
+  --border-color: #dadce0;
+  --bg-color: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --border-radius: 4px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+  font-size: 13px;
+  color: var(--text-color);
+  background: var(--bg-color);
+  min-width: 320px;
+  max-width: 400px;
+}
+
+.popup-container {
+  padding: var(--spacing-md);
+}
+
+.section {
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+/* Status Indicator */
+.status-indicator {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  text-align: center;
+}
+
+.status-indicator.allowed {
+  background: #e6f4ea;
+  color: var(--success-color);
+}
+
+.status-indicator.blocked {
+  background: #fce8e6;
+  color: var(--danger-color);
+}
+
+.status-indicator.not-allowed {
+  background: #fef7e0;
+  color: #e37400;
+}
+
+/* Banner */
+.banner {
+  background: var(--bg-secondary);
+  padding: var(--spacing-sm);
+  border-radius: var(--border-radius);
+  margin-bottom: var(--spacing-md);
+}
+
+.banner-actions {
+  display: flex;
+  gap: var(--spacing-xs);
+  margin-top: var(--spacing-sm);
+}
+
+/* Checkbox */
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+/* Mode Tabs */
+.mode-tabs {
+  display: flex;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-md);
+}
+
+.mode-tab {
+  flex: 1;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--border-color);
+  background: var(--bg-color);
+  cursor: pointer;
+  border-radius: var(--border-radius);
+  font-size: 12px;
+  transition: all 0.2s;
+}
+
+.mode-tab:hover {
+  background: var(--bg-secondary);
+}
+
+.mode-tab.active {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+/* Mode Options */
+.mode-options {
+  padding: var(--spacing-sm);
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius);
+}
+
+.mode-options label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.mode-options input,
+.mode-options select {
+  padding: var(--spacing-sm);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: 13px;
+}
+
+.hint {
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-style: italic;
+}
+
+/* Buttons */
+.btn {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--primary-color);
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--primary-hover);
+}
+
+.btn-danger {
+  background: var(--danger-color);
+  color: white;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: var(--danger-hover);
+}
+
+.btn-small {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: 11px;
+}
+
+#control-section {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+#control-section .btn {
+  flex: 1;
+}
+
+/* Progress */
+#progress-section {
+  background: var(--bg-secondary);
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius);
+}
+
+.progress-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-xs);
+  font-size: 12px;
+}
+
+.progress-item:last-child {
+  margin-bottom: 0;
+}
+
+.notice {
+  background: #fef7e0;
+  color: #e37400;
+  padding: var(--spacing-sm);
+  border-radius: var(--border-radius);
+  margin-top: var(--spacing-sm);
+  text-align: center;
+  font-size: 12px;
+}
+
+/* Advanced Settings */
+#advanced-section {
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 0;
+}
+
+#advanced-section summary {
+  padding: var(--spacing-sm) var(--spacing-md);
+  cursor: pointer;
+  font-weight: 500;
+  background: var(--bg-secondary);
+}
+
+#advanced-section[open] summary {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.advanced-content {
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.advanced-content label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  font-size: 12px;
+}
+
+.advanced-content input,
+.advanced-content select {
+  padding: var(--spacing-sm);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: 13px;
+}
+
+.advanced-content input[type="range"] {
+  padding: 0;
+}
+
+/* Export Section */
+#export-section {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+#export-section .btn {
+  flex: 1;
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal-content {
+  background: white;
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius);
+  max-width: 280px;
+  text-align: center;
+}
+
+.modal-content p {
+  margin-bottom: var(--spacing-md);
+}
+
+.modal-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  justify-content: center;
+}
+
+/* Status Message */
+.status-message {
+  position: fixed;
+  bottom: var(--spacing-md);
+  left: var(--spacing-md);
+  right: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius);
+  text-align: center;
+  font-size: 12px;
+  z-index: 50;
+}
+
+.status-message.success {
+  background: #e6f4ea;
+  color: var(--success-color);
+}
+
+.status-message.error {
+  background: #fce8e6;
+  color: var(--danger-color);
+}
+
+.status-message.info {
+  background: #e8f0fe;
+  color: var(--primary-color);
+}
+
+/* Utility */
+.hidden {
+  display: none !important;
+}

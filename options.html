@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="optionsTitle">Auto Page Capture - Options</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="options-container">
+    <h1 data-i18n="optionsTitle">Auto Page Capture - Options</h1>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab active" data-tab="capture" data-i18n="tabCapture">Capture</button>
+      <button class="tab" data-tab="output" data-i18n="tabOutput">Output</button>
+      <button class="tab" data-tab="ocr" data-i18n="tabOcr">OCR</button>
+      <button class="tab" data-tab="upload" data-i18n="tabUpload">Upload</button>
+      <button class="tab" data-tab="domains" data-i18n="tabDomains">Domains</button>
+    </div>
+
+    <!-- Capture Tab -->
+    <div class="tab-content active" id="tab-capture">
+      <div class="form-group">
+        <label data-i18n="maxPages">Max pages</label>
+        <input type="number" id="default-max-pages" value="200" min="1" max="1000">
+      </div>
+
+      <div class="form-group">
+        <label data-i18n="delayMs">Delay after page turn (ms)</label>
+        <input type="number" id="default-delay-ms" value="700" min="100" max="5000" step="100">
+      </div>
+
+      <div class="form-group">
+        <label data-i18n="duplicateTolerance">Stop after N duplicates</label>
+        <input type="number" id="default-duplicate-tolerance" value="3" min="1" max="10">
+      </div>
+
+      <div class="form-group">
+        <label data-i18n="quality">Default quality</label>
+        <input type="range" id="default-quality" min="0.5" max="1" step="0.1" value="0.8">
+        <span id="quality-value">0.8</span>
+      </div>
+    </div>
+
+    <!-- Output Tab -->
+    <div class="tab-content" id="tab-output">
+      <div class="form-group">
+        <label data-i18n="pageSize">Default page size</label>
+        <select id="default-page-size">
+          <option value="auto" data-i18n="pageSizeAuto">Auto (match image)</option>
+          <option value="A4" data-i18n="pageSizeA4">A4</option>
+          <option value="Letter" data-i18n="pageSizeLetter">Letter</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label data-i18n="filenameTemplate">Filename template</label>
+        <input type="text" id="filename-template" value="capture_{date}_{time}.pdf">
+        <p class="help-text" data-i18n="filenameHelp">Variables: {title}, {date}, {time}, {domain}, {pageCount}</p>
+      </div>
+    </div>
+
+    <!-- OCR Tab -->
+    <div class="tab-content" id="tab-ocr">
+      <div class="form-group">
+        <label class="checkbox-label">
+          <input type="checkbox" id="ocr-enabled">
+          <span data-i18n="ocrEnable">Enable OCR (create searchable PDFs)</span>
+        </label>
+      </div>
+
+      <div id="ocr-status" class="status-box">
+        <span data-i18n="ocrCheckingDeps">Checking dependencies...</span>
+      </div>
+
+      <div id="ocr-settings">
+        <div class="form-group">
+          <label data-i18n="ocrEngine">OCR Engine</label>
+          <select id="ocr-engine">
+            <option value="apple">Apple Vision (Recommended for Japanese)</option>
+            <option value="tesseract">Tesseract</option>
+          </select>
+          <p class="help-text" data-i18n="ocrEngineHelp">Apple Vision has better Japanese text recognition on macOS</p>
+        </div>
+
+        <div class="form-group">
+          <label data-i18n="ocrLanguages">OCR Languages</label>
+          <select id="ocr-languages">
+            <option value="eng">English only</option>
+            <option value="jpn">Japanese only</option>
+            <option value="eng+jpn">English + Japanese</option>
+          </select>
+          <p class="help-text" data-i18n="ocrLanguagesHelp">Select the languages in your PDFs for better recognition</p>
+        </div>
+
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="ocr-deskew">
+            <span data-i18n="ocrDeskew">Deskew pages (straighten tilted scans)</span>
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label data-i18n="ocrOptimize">Optimization level</label>
+          <input type="range" id="ocr-optimize" min="0" max="3" step="1" value="1">
+          <span id="ocr-optimize-value">1</span>
+          <p class="help-text" data-i18n="ocrOptimizeHelp">0=none, 1=lossless, 2=lossy, 3=aggressive (smaller file)</p>
+        </div>
+      </div>
+
+      <div id="ocr-install-help" class="help-box" style="display: none;">
+        <h4 data-i18n="ocrInstallTitle">Installation Required</h4>
+        <p data-i18n="ocrInstallDesc">OCR requires additional software to be installed:</p>
+        <pre>brew install ocrmypdf tesseract tesseract-lang</pre>
+        <p data-i18n="ocrInstallScript">Then run the install script:</p>
+        <pre>cd native_host && ./install_macos.sh</pre>
+      </div>
+    </div>
+
+    <!-- Upload Tab -->
+    <div class="tab-content" id="tab-upload">
+      <div class="form-group">
+        <label class="checkbox-label">
+          <input type="checkbox" id="upload-enabled">
+          <span data-i18n="uploadEnabled">Enable upload</span>
+        </label>
+      </div>
+
+      <div id="upload-settings">
+        <div class="form-group">
+          <label data-i18n="uploadEndpoint">Endpoint URL</label>
+          <input type="url" id="upload-endpoint" placeholder="https://example.com/upload">
+          <span id="endpoint-status" class="status-text"></span>
+        </div>
+
+        <div class="form-group">
+          <label data-i18n="uploadAuthHeader">Auth header name</label>
+          <input type="text" id="upload-auth-header" placeholder="Authorization">
+        </div>
+
+        <div class="form-group">
+          <label data-i18n="uploadAuthToken">Auth token</label>
+          <input type="password" id="upload-auth-token" placeholder="Bearer your-token">
+        </div>
+
+        <div class="form-group">
+          <label data-i18n="uploadMethod">Upload method</label>
+          <select id="upload-method">
+            <option value="POST" data-i18n="uploadMethodPost">POST multipart</option>
+            <option value="PUT" data-i18n="uploadMethodPut">PUT raw body</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Domains Tab -->
+    <div class="tab-content" id="tab-domains">
+      <!-- Allowlist -->
+      <div class="domain-section">
+        <h3 data-i18n="allowlistTitle">Allowed Domains</h3>
+        <p class="help-text" data-i18n="allowlistDesc">Add domains where capture is allowed. Subdomains are included automatically.</p>
+
+        <div class="domain-input">
+          <input type="text" id="new-allowlist-domain" placeholder="example.com">
+          <button id="btn-add-allowlist" class="btn" data-i18n="addDomain">Add</button>
+        </div>
+
+        <ul id="allowlist" class="domain-list"></ul>
+      </div>
+
+      <!-- Blocklist -->
+      <div class="domain-section">
+        <h3 data-i18n="blocklistTitle">Blocked Domains</h3>
+        <p class="help-text" data-i18n="blocklistDesc">These domains are blocked and cannot be removed.</p>
+
+        <ul id="blocklist" class="domain-list"></ul>
+      </div>
+    </div>
+
+    <!-- Save Button -->
+    <div class="actions">
+      <button id="btn-save" class="btn btn-primary" data-i18n="saveSettings">Save Settings</button>
+      <span id="save-status" class="status-text"></span>
+    </div>
+  </div>
+
+  <script src="options.js" type="module"></script>
+</body>
+</html>
