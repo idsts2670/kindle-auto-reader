@@ -332,3 +332,51 @@ See https://github.com/w3c/ServiceWorker/issues/1356.
 **Next Steps:**
 - Search for Japanese-specific OCR solutions
 - Consider OCRmyPDF-AppleOCR plugin which uses macOS native OCR
+
+---
+
+## 2026-02-24: PDF build fails with `runtime.sendMessage` 64MiB limit
+
+**Error:** `Failed to build PDF: Error in invocation of runtime.sendMessage ... Message exceeded maximum allowed size of 64MiB`
+
+**Context:** When building/downloading large PDFs after capturing many pages.
+
+**Root Cause:**
+- `service_worker.js` sent all captured images to offscreen as base64 via `chrome.runtime.sendMessage`.
+- `offscreen.js` returned the full PDF as base64 in the message response.
+- Large sessions exceeded Chrome extension message payload limits.
+
+**Fix Applied:**
+1. Added shared blob storage helper to move large binary data through IndexedDB instead of runtime messages.
+2. Changed worker → offscreen message contract to control-only payload:
+   - from `{ type: 'offscreen:buildPdf', data: { images, session, filename } }`
+   - to `{ type: 'offscreen:buildPdf', sessionId, filename }`
+3. Updated offscreen PDF builder to:
+   - read captured page blobs from IndexedDB
+   - build PDF
+   - write built PDF blob back to IndexedDB
+   - return compact metadata only (no `pdfBase64`)
+4. Updated service worker to:
+   - read built PDF blob from IndexedDB
+   - keep upload/OCR flow unchanged (source now uses blob from storage)
+   - clean up both page blobs and built PDF blob after completion/deletion
+5. Added status events/logging for build lifecycle (`pdfBuildStarted`, `pdfBuildCompleted`, `pdfBuildFailed`) and preflight size metrics.
+
+**Code Changed:**
+- Added: `utils/blob_store.js`
+- Updated: `service_worker.js`
+- Updated: `offscreen.js`
+- Updated: `offscreen.html` (module script loading)
+- Updated: `popup.js` (build status messages)
+
+**Validation:**
+- Syntax checks passed:
+  - `node --check service_worker.js`
+  - `node --check offscreen.js`
+  - `node --check utils/blob_store.js`
+- Lint checks on changed files: no issues.
+- Confirmed old `pdfBase64` message exchange path was removed.
+
+**Notes:**
+- This removes the primary 64MiB message overflow failure path.
+- Very large final data URLs for download can still be heavy in memory; if needed, consider a future move to non-data-URL download handoff.

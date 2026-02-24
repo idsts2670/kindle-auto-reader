@@ -1,0 +1,30 @@
+# macOS
+.DS_Store
+
+# Logs and temp files
+*.log
+*.tmp
+*.swp
+*.swo
+
+# Environment / secrets
+.env
+.env.*
+
+# Editor / IDE
+.vscode/
+.idea/
+
+# JavaScript / Node
+node_modules/
+
+# Python (native host tooling)
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+.venv/
+venv/
+native_host/.venv/
+native_host/venv/

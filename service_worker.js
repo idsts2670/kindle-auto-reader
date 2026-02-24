@@ -4,11 +4,7 @@
  */
 
 import {
-  openDB,
-  storeImage,
-  getSessionImages,
   getSessionImageCount,
-  deleteSessionImages,
   saveSession,
   getSession,
   getIncompleteSessions,
@@ -19,6 +15,12 @@ import {
   isDomainBlocked,
   BLOCKLIST
 } from './utils/storage_utils.js';
+import {
+  putCapturedPage,
+  listCapturedPages,
+  getBuiltPdf,
+  deleteSessionBlobs
+} from './utils/blob_store.js';
 
 import {
   formatDuration,
@@ -152,6 +154,7 @@ async function handleMessage(message, sender) {
       return buildAndDownloadPdf(message.sessionId);
 
     case 'deleteSession':
+      await deleteSessionBlobs(message.sessionId);
       await deleteSession(message.sessionId);
       return { success: true };
 
@@ -163,6 +166,9 @@ async function handleMessage(message, sender) {
 
     case 'getIncompleteSessions':
       return { sessions: await getIncompleteSessions() };
+
+    case 'getSessionImageCount':
+      return { count: await getSessionImageCount(message.sessionId) };
 
     case 'checkOcrDependencies':
       try {
@@ -429,7 +435,7 @@ async function captureLoop() {
       captureState.lastHash = processed.hash;
 
       // Store image
-      await storeImage(
+      await putCapturedPage(
         captureState.sessionId,
         captureState.pageIndex,
         processed.blob,
@@ -566,12 +572,14 @@ async function buildAndDownloadPdf(sessionId) {
     return { error: 'Session not found' };
   }
 
-  const images = await getSessionImages(sessionId);
-  if (images.length === 0) {
+  const pages = await listCapturedPages(sessionId);
+  if (pages.length === 0) {
     return { error: 'No images to build PDF' };
   }
 
   try {
+    broadcastMessage({ type: 'pdfBuildStarted', sessionId });
+
     // Generate filename
     const settings = await getSettings();
     const filename = applyFilenameTemplate(settings.filenameTemplate, {
@@ -579,16 +587,18 @@ async function buildAndDownloadPdf(sessionId) {
       date: getDateString(),
       time: getTimeString(),
       domain: session.sourceDomain,
-      pageCount: images.length.toString()
+      pageCount: pages.length.toString()
     });
 
-    // Convert blobs to base64 for messaging
-    const imageDataArray = [];
-    for (const imageRecord of images) {
-      const arrayBuffer = await imageRecord.blob.arrayBuffer();
-      const base64 = arrayBufferToBase64(arrayBuffer);
-      imageDataArray.push({ base64: 'data:image/jpeg;base64,' + base64 });
-    }
+    // Preflight estimate to aid debugging for very large sessions
+    const totalImageBytes = pages.reduce((sum, page) => sum + (page.blob?.size || 0), 0);
+    const avgImageBytes = pages.length > 0 ? Math.round(totalImageBytes / pages.length) : 0;
+    console.log('[PDF] Preflight', {
+      sessionId,
+      pageCount: pages.length,
+      totalImageBytes,
+      avgImageBytes
+    });
 
     // Ensure offscreen document exists
     await ensureOffscreenDocument();
@@ -596,19 +606,25 @@ async function buildAndDownloadPdf(sessionId) {
     // Send to offscreen document for PDF generation
     const result = await chrome.runtime.sendMessage({
       type: 'offscreen:buildPdf',
-      data: {
-        images: imageDataArray,
-        session,
-        filename
-      }
+      sessionId,
+      filename
     });
 
     if (result.error) {
+      broadcastMessage({ type: 'pdfBuildFailed', sessionId, error: result.error });
       return { error: result.error };
     }
 
+    const pdfBlob = await getBuiltPdf(sessionId);
+    if (!pdfBlob) {
+      const missingBlobError = 'PDF build completed but output blob was not found';
+      broadcastMessage({ type: 'pdfBuildFailed', sessionId, error: missingBlobError });
+      return { error: missingBlobError };
+    }
+
     // Download using data URL (URL.createObjectURL is not available in service workers)
-    const dataUrl = 'data:application/pdf;base64,' + result.pdfBase64;
+    const pdfBuffer = await pdfBlob.arrayBuffer();
+    const dataUrl = 'data:application/pdf;base64,' + arrayBufferToBase64(pdfBuffer);
     const downloadId = await chrome.downloads.download({
       url: dataUrl,
       filename: filename,
@@ -617,13 +633,6 @@ async function buildAndDownloadPdf(sessionId) {
 
     // Handle upload if enabled
     if (settings.uploadEnabled && settings.uploadEndpoint) {
-      // Convert base64 to blob for upload
-      const pdfBinary = atob(result.pdfBase64);
-      const pdfArray = new Uint8Array(pdfBinary.length);
-      for (let i = 0; i < pdfBinary.length; i++) {
-        pdfArray[i] = pdfBinary.charCodeAt(i);
-      }
-      const pdfBlob = new Blob([pdfArray], { type: 'application/pdf' });
       try {
         await uploadPdf(pdfBlob, filename, settings);
         broadcastMessage({ type: 'uploadSuccess' });
@@ -663,15 +672,28 @@ async function buildAndDownloadPdf(sessionId) {
           });
         }
 
-        // Delete session data (data URLs don't need cleanup like object URLs)
-        deleteSession(sessionId);
+        // Delete session data after download completes
+        deleteSessionBlobs(sessionId).catch((e) => {
+          console.warn('[PDF] Failed to delete session blobs:', e);
+        });
+        deleteSession(sessionId).catch((e) => {
+          console.warn('[PDF] Failed to delete session metadata:', e);
+        });
       }
     });
 
-    return { success: true, filename, pageCount: images.length };
+    broadcastMessage({
+      type: 'pdfBuildCompleted',
+      sessionId,
+      pageCount: pages.length,
+      pdfSizeBytes: pdfBlob.size
+    });
+
+    return { success: true, filename, pageCount: pages.length };
 
   } catch (err) {
     console.error('PDF build error:', err);
+    broadcastMessage({ type: 'pdfBuildFailed', sessionId, error: err.message });
     return { error: `Failed to build PDF: ${err.message}` };
   }
 }

@@ -502,6 +502,18 @@ function handleMessage(message) {
       updateUI(message.state);
       break;
 
+    case 'pdfBuildStarted':
+      showMessage('info', 'Building PDF...');
+      break;
+
+    case 'pdfBuildCompleted':
+      // Download completion has its own success message from request handlers.
+      break;
+
+    case 'pdfBuildFailed':
+      showMessage('error', message.error || 'Failed to build PDF');
+      break;
+
     case 'uploadSuccess':
       showMessage('success', chrome.i18n.getMessage('uploadSuccess'));
       break;

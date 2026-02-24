@@ -3,25 +3,14 @@
  * Runs in a separate context with full DOM capabilities
  */
 
-/**
- * Convert Uint8Array to base64 string using chunked approach
- * Avoids "Maximum call stack size exceeded" error from spread operator
- */
-function uint8ArrayToBase64(bytes) {
-  let binary = '';
-  const chunkSize = 8192;
-  for (let i = 0; i < bytes.length; i += chunkSize) {
-    const chunk = bytes.subarray(i, Math.min(i + chunkSize, bytes.length));
-    binary += String.fromCharCode.apply(null, chunk);
-  }
-  return btoa(binary);
-}
+import { listCapturedPages, putBuiltPdf } from './utils/blob_store.js';
+import { getSession } from './utils/storage_utils.js';
 
 // Listen for messages from the service worker
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   // Use unique message type to avoid collision with popup -> service_worker messages
   if (message.type === 'offscreen:buildPdf') {
-    buildPdf(message.data)
+    buildPdf(message)
       .then(result => sendResponse(result))
       .catch(error => sendResponse({ error: error.message }));
     return true; // Keep channel open for async response
@@ -30,12 +19,20 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
 /**
  * Build PDF from images
- * @param {object} data - Contains images array and session info
+ * @param {object} data - Contains sessionId and filename
  */
 async function buildPdf(data) {
-  const { images, session, filename } = data;
+  const { sessionId, filename } = data;
+  const [session, pages] = await Promise.all([
+    getSession(sessionId),
+    listCapturedPages(sessionId)
+  ]);
 
-  if (!images || images.length === 0) {
+  if (!session) {
+    return { error: 'Session not found' };
+  }
+
+  if (!pages || pages.length === 0) {
     return { error: 'No images to build PDF' };
   }
 
@@ -52,14 +49,8 @@ async function buildPdf(data) {
     pdfDoc.setSubject(`Source: ${session.sourceUrl}`);
 
     // Process each image
-    for (const imageData of images) {
-      // Convert base64 to Uint8Array
-      const base64Data = imageData.base64.split(',')[1] || imageData.base64;
-      const binaryString = atob(base64Data);
-      const bytes = new Uint8Array(binaryString.length);
-      for (let i = 0; i < binaryString.length; i++) {
-        bytes[i] = binaryString.charCodeAt(i);
-      }
+    for (const pageRecord of pages) {
+      const bytes = new Uint8Array(await pageRecord.blob.arrayBuffer());
 
       // Embed JPEG image
       const jpegImage = await pdfDoc.embedJpg(bytes);
@@ -111,15 +102,17 @@ async function buildPdf(data) {
       });
     }
 
-    // Save PDF as base64 (chunked to avoid stack overflow)
+    // Save PDF bytes and persist blob to IndexedDB for the service worker
     const pdfBytes = await pdfDoc.save();
-    const pdfBase64 = uint8ArrayToBase64(pdfBytes);
+    const pdfBlob = new Blob([pdfBytes], { type: 'application/pdf' });
+    await putBuiltPdf(sessionId, pdfBlob);
 
     return {
       success: true,
-      pdfBase64,
+      sessionId,
       filename,
-      pageCount: images.length
+      pageCount: pages.length,
+      pdfSizeBytes: pdfBlob.size
     };
 
   } catch (err) {
