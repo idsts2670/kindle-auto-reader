@@ -108,15 +108,6 @@ Access via right-click extension icon → Options, or popup → Options.
 - `capture_*.searchable.pdf` - OCR'd PDF with text layer
 - `capture_*.searchable.txt` - Plain text extraction (for searching)
 
-## Testing with Demo Page
-
-1. Load the extension in Chrome
-2. Open `demo/index.html` in a new tab (use `file://` URL)
-3. Add `file://` to your allowlist in Options → Domains
-4. Or serve locally: `python3 -m http.server 8080` and add `localhost` to allowlist
-5. Open popup, check confirmation, click Start Capture
-6. The demo has 10 pages with simulated loading delays
-
 ## Troubleshooting
 
 ### "Selector not found"
@@ -183,7 +174,7 @@ Access via right-click extension icon → Options, or popup → Options.
 │   ├── en/messages.json    # English strings
 │   └── ja/messages.json    # Japanese strings
 ├── lib/
-│   └── pdf-lib.esm.min.js  # PDF generation library
+│   └── pdf-lib.min.js      # PDF generation library
 ├── utils/
 │   ├── storage_utils.js    # IndexedDB & chrome.storage helpers
 │   ├── image_utils.js      # Image processing, entropy, comparison
@@ -195,8 +186,6 @@ Access via right-click extension icon → Options, or popup → Options.
 │   ├── requirements.txt    # Python dependencies
 │   └── README.md           # OCR setup instructions
 ├── icons/                  # Extension icons
-├── demo/
-│   └── index.html          # Test page with simulated delays
 └── README.md
 ```
 
