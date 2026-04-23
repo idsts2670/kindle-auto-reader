@@ -32,6 +32,7 @@ const elements = {
   delayMs: document.getElementById('delay-ms'),
   waitSelector: document.getElementById('wait-selector'),
   endSelector: document.getElementById('end-selector'),
+  notReadySelector: document.getElementById('not-ready-selector'),
   duplicateTolerance: document.getElementById('duplicate-tolerance'),
   quality: document.getElementById('quality'),
   qualityValue: document.getElementById('quality-value'),
@@ -126,6 +127,9 @@ function applyPopupState(state) {
   }
   if (state.endSelector) {
     elements.endSelector.value = state.endSelector;
+  }
+  if (state.notReadySelector) {
+    elements.notReadySelector.value = state.notReadySelector;
   }
   if (state.duplicateTolerance) {
     elements.duplicateTolerance.value = state.duplicateTolerance;
@@ -244,7 +248,8 @@ function setupEventListeners() {
 
   // Save state on input changes
   [elements.keySelect, elements.nextSelector, elements.maxPages, elements.delayMs,
-   elements.waitSelector, elements.endSelector, elements.duplicateTolerance, elements.pageSize
+   elements.waitSelector, elements.endSelector, elements.notReadySelector,
+   elements.duplicateTolerance, elements.pageSize
   ].forEach(el => {
     el.addEventListener('change', saveCurrentState);
   });
@@ -365,6 +370,7 @@ async function saveCurrentState() {
     delayMs: parseInt(elements.delayMs.value),
     waitSelector: elements.waitSelector.value,
     endSelector: elements.endSelector.value,
+    notReadySelector: elements.notReadySelector.value,
     duplicateTolerance: parseInt(elements.duplicateTolerance.value),
     quality: parseFloat(elements.quality.value),
     pageSizeMode: elements.pageSize.value
@@ -393,6 +399,7 @@ async function startCapture() {
     delayMs: parseInt(elements.delayMs.value),
     waitSelector: elements.waitSelector.value,
     endSelector: elements.endSelector.value,
+    notReadySelector: elements.notReadySelector.value,
     duplicateTolerance: parseInt(elements.duplicateTolerance.value),
     quality: parseFloat(elements.quality.value),
     pageSizeMode: elements.pageSize.value

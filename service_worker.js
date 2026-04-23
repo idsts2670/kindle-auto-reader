@@ -84,6 +84,25 @@ let ocrState = {
   lastError: null
 };
 
+// Per-site readiness profiles — keyed by exact hostname
+const SITE_PROFILES = {
+  'read.amazon.com':    { notReadySelector: 'div.loader', loaderMaxWait: 8000 },
+  'read.amazon.co.jp': { notReadySelector: 'div.loader', loaderMaxWait: 8000 }
+};
+
+/**
+ * Resolve a site profile for a given hostname.
+ * Exact match first, then suffix/subdomain match.
+ */
+function resolveSiteProfile(hostname) {
+  hostname = (hostname || '').toLowerCase();
+  if (SITE_PROFILES[hostname]) return SITE_PROFILES[hostname];
+  for (const key of Object.keys(SITE_PROFILES)) {
+    if (hostname.endsWith('.' + key)) return SITE_PROFILES[key];
+  }
+  return null;
+}
+
 /**
  * Initialize the service worker
  */
@@ -260,6 +279,14 @@ async function startCapture(config) {
     sourceDomain: new URL(tab.url).hostname
   };
 
+  // Auto-apply site profile if no notReadySelector was specified by the user
+  const startProfile = resolveSiteProfile(captureState.sourceDomain);
+  if (startProfile && !config.notReadySelector) {
+    config.notReadySelector = startProfile.notReadySelector;
+    config.loaderMaxWait = startProfile.loaderMaxWait;
+    console.log(`[readiness] auto-applied profile for ${captureState.sourceDomain}: notReadySelector=${config.notReadySelector}`);
+  }
+
   // Save session metadata
   await saveSession({
     id: sessionId,
@@ -306,13 +333,22 @@ async function resumeCapture(sessionId) {
 
   await new Promise(r => setTimeout(r, 100));
 
+  // Apply site profile to resumed config using original session domain
+  const resumeConfig = { ...session.config };
+  const resumeProfile = resolveSiteProfile(session.sourceDomain || '');
+  if (resumeProfile && !resumeConfig.notReadySelector) {
+    resumeConfig.notReadySelector = resumeProfile.notReadySelector;
+    resumeConfig.loaderMaxWait = resumeProfile.loaderMaxWait;
+    console.log(`[readiness] auto-applied profile for ${session.sourceDomain}: notReadySelector=${resumeConfig.notReadySelector}`);
+  }
+
   // Resume state
   captureState = {
     active: true,
     paused: false,
     sessionId,
     tabId: tab.id,
-    config: session.config,
+    config: resumeConfig,
     pageIndex: imageCount,
     startTime: session.startTime,
     duplicateCount: 0,
@@ -388,18 +424,27 @@ async function captureLoop() {
         }
       }
 
-      // Double-capture verification
-      const capture1 = await captureTab();
-      await new Promise(r => setTimeout(r, 200));
-      const capture2 = await captureTab();
-
-      // Check if captures match
-      const match = await capturesMatch(capture1, capture2);
-      if (!match) {
-        console.warn('Double-capture mismatch, using second capture');
+      // Layer A: loader idle check (Kindle and other sites with a loader selector)
+      if (captureState.config.notReadySelector) {
+        console.log(`[readiness] Waiting for loader: ${captureState.config.notReadySelector}`);
+        const loaderResult = await sendToContentScript('waitForLoaderIdle', {
+          selector: captureState.config.notReadySelector,
+          maxWaitMs: captureState.config.loaderMaxWait ?? 8000
+        });
+        if (loaderResult.idle) {
+          console.log(`[readiness] Loader idle after ${loaderResult.elapsedMs}ms`);
+        } else {
+          console.log(`[readiness] Loader wait timed out after ${loaderResult.elapsedMs}ms — proceeding`);
+        }
+      } else {
+        console.log('[readiness] No notReadySelector — skipping loader wait');
       }
 
-      const finalCapture = capture2;
+      // Layer B: pixel stability check (replaces double-capture)
+      const finalCapture = await pixelStabilityCheck(
+        captureState.config.pixelStabilityMaxWait ?? 8000,
+        captureState.config.pixelStabilityInterval ?? 250
+      );
 
       // Check for blank image - ONLY in scroll mode
       // For keyboard/click modes, book pages with minimal text (dedications, chapter breaks) are valid
@@ -502,6 +547,48 @@ async function captureTab() {
       }
     });
   });
+}
+
+/**
+ * Wait until two consecutive captures are pixel-stable (Hamming ≤ 2).
+ * On timeout returns the last capture already in hand — no extra captureTab call.
+ */
+async function pixelStabilityCheck(maxWaitMs, intervalMs) {
+  const startTime = Date.now();
+
+  async function safeCaptureTab() {
+    try {
+      return await captureTab();
+    } catch (err) {
+      if (err.message && err.message.includes('MAX_CAPTURE_VISIBLE_TAB_CALLS_PER_SECOND')) {
+        console.warn('[readiness] captureTab quota hit, waiting 800ms before retry');
+        await new Promise(r => setTimeout(r, 800));
+        return captureTab();
+      }
+      throw err;
+    }
+  }
+
+  let prevCapture = await safeCaptureTab();
+
+  while (true) {
+    await new Promise(r => setTimeout(r, intervalMs));
+    const currCapture = await safeCaptureTab();
+    const elapsed = Date.now() - startTime;
+
+    if (await capturesMatch(prevCapture, currCapture)) {
+      console.log(`[readiness] pixel stable after ${elapsed}ms`);
+      return currCapture;
+    }
+
+    if (elapsed >= maxWaitMs) {
+      console.log(`[readiness] pixel stability timed out after ${elapsed}ms, using last capture`);
+      return currCapture;
+    }
+
+    console.log(`[readiness] pixel not stable, retrying (${elapsed}ms elapsed)`);
+    prevCapture = currCapture;
+  }
 }
 
 /**

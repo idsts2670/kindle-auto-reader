@@ -307,5 +307,17 @@
     "placeholders": {
       "error": { "content": "$1" }
     }
+  },
+  "notReadySelector": {
+    "message": "Loader selector"
+  },
+  "notReadySelectorHelp": {
+    "message": "CSS selector for a loading element. Capture waits until hidden/empty. Leave blank to disable."
+  },
+  "loaderMaxWait": {
+    "message": "Loader idle max wait (ms)"
+  },
+  "pixelStabilityMaxWait": {
+    "message": "Pixel stability max wait (ms)"
   }
 }

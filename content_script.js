@@ -318,6 +318,46 @@
   }
 
   /**
+   * Returns true when a loader element is considered idle (not loading).
+   * Covers: absent, empty children+text, display:none, visibility:hidden, opacity:0.
+   */
+  function isLoaderIdle(el) {
+    if (!el) return true;
+    const style = window.getComputedStyle(el);
+    if (style.display === 'none') return true;
+    if (style.visibility === 'hidden') return true;
+    if (parseFloat(style.opacity) === 0) return true;
+    if (el.children.length === 0 && el.textContent.trim() === '') return true;
+    return false;
+  }
+
+  /**
+   * Poll until loader element is idle or timeout is reached.
+   * @param {string} selector - CSS selector for the loader element
+   * @param {number} maxWaitMs - Maximum wait time in ms
+   * @returns {Promise<{idle: boolean, reason: string, elapsedMs: number}>}
+   */
+  async function waitForLoaderIdle(selector, maxWaitMs = 8000) {
+    const startTime = Date.now();
+    const pollInterval = 50;
+
+    while (true) {
+      const elapsedMs = Date.now() - startTime;
+      const el = document.querySelector(selector);
+
+      if (isLoaderIdle(el)) {
+        return { idle: true, reason: 'idle', elapsedMs };
+      }
+
+      if (elapsedMs >= maxWaitMs) {
+        return { idle: false, reason: 'timeout', elapsedMs };
+      }
+
+      await new Promise(r => setTimeout(r, pollInterval));
+    }
+  }
+
+  /**
    * Get page info for logging
    */
   function getPageInfo() {
@@ -348,6 +388,12 @@
           const found = await waitForSelector(message.selector, message.timeout);
           sendResponse({ found });
           break;
+
+        case 'waitForLoaderIdle': {
+          const loaderResult = await waitForLoaderIdle(message.selector, message.maxWaitMs);
+          sendResponse(loaderResult);
+          break;
+        }
 
         case 'checkSelector':
           sendResponse({ exists: selectorExists(message.selector) });

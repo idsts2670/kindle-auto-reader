@@ -217,7 +217,12 @@ const DEFAULT_SETTINGS = {
   ocrEngine: 'apple',  // 'apple' for AppleOCR (better Japanese), 'tesseract' for Tesseract
   ocrLanguages: 'eng+jpn',
   ocrDeskew: true,
-  ocrOptimize: 1
+  ocrOptimize: 1,
+  // Readiness detection
+  notReadySelector: '',       // CSS selector for site loader element; '' = disabled
+  loaderMaxWait: 8000,        // ms — max time to wait for loader idle
+  pixelStabilityMaxWait: 8000, // ms — max time for pixel stability loop
+  pixelStabilityInterval: 600  // ms — gap between stability capture pairs (Chrome allows ~2 captureVisibleTab/sec)
 };
 
 // Hardcoded blocklist - cannot be modified

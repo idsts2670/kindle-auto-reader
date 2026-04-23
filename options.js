@@ -16,6 +16,9 @@ const elements = {
   defaultDuplicateTolerance: document.getElementById('default-duplicate-tolerance'),
   defaultQuality: document.getElementById('default-quality'),
   qualityValue: document.getElementById('quality-value'),
+  defaultNotReadySelector: document.getElementById('default-not-ready-selector'),
+  defaultLoaderMaxWait: document.getElementById('default-loader-max-wait'),
+  defaultPixelStabilityMaxWait: document.getElementById('default-pixel-stability-max-wait'),
 
   // Output settings
   defaultPageSize: document.getElementById('default-page-size'),
@@ -99,6 +102,9 @@ async function loadSettings() {
   elements.qualityValue.textContent = currentSettings.quality || 0.8;
   elements.defaultPageSize.value = currentSettings.pageSizeMode || 'auto';
   elements.filenameTemplate.value = currentSettings.filenameTemplate || 'capture_{date}_{time}.pdf';
+  elements.defaultNotReadySelector.value = currentSettings.notReadySelector || '';
+  elements.defaultLoaderMaxWait.value = currentSettings.loaderMaxWait ?? 8000;
+  elements.defaultPixelStabilityMaxWait.value = currentSettings.pixelStabilityMaxWait ?? 8000;
 
   elements.uploadEnabled.checked = currentSettings.uploadEnabled || false;
   elements.uploadEndpoint.value = currentSettings.uploadEndpoint || '';
@@ -364,6 +370,9 @@ async function saveAllSettings() {
     uploadAuthToken: elements.uploadAuthToken.value,
     uploadMethod: elements.uploadMethod.value,
     allowlist: currentSettings.allowlist,
+    notReadySelector: elements.defaultNotReadySelector.value,
+    loaderMaxWait: parseInt(elements.defaultLoaderMaxWait.value),
+    pixelStabilityMaxWait: parseInt(elements.defaultPixelStabilityMaxWait.value),
     // OCR settings
     ocrEnabled: elements.ocrEnabled.checked,
     ocrEngine: elements.ocrEngine.value,

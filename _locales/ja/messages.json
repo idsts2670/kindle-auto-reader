@@ -307,5 +307,17 @@
     "placeholders": {
       "error": { "content": "$1" }
     }
+  },
+  "notReadySelector": {
+    "message": "ローダーセレクター"
+  },
+  "notReadySelectorHelp": {
+    "message": "ローディング要素のCSSセレクター。非表示/空になるまでキャプチャを待機します。無効にするには空白のままにしてください。"
+  },
+  "loaderMaxWait": {
+    "message": "ローダー待機最大時間 (ms)"
+  },
+  "pixelStabilityMaxWait": {
+    "message": "ピクセル安定待機最大時間 (ms)"
   }
 }

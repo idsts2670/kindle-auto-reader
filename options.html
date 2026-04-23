@@ -41,6 +41,22 @@
         <input type="range" id="default-quality" min="0.5" max="1" step="0.1" value="0.8">
         <span id="quality-value">0.8</span>
       </div>
+
+      <div class="form-group">
+        <label data-i18n="notReadySelector">Loader selector (skip capture until idle)</label>
+        <input type="text" id="default-not-ready-selector" placeholder="div.loader">
+        <p class="help-text" data-i18n="notReadySelectorHelp">CSS selector for a loading element. Capture waits until this element is hidden/empty. Leave blank to disable.</p>
+      </div>
+
+      <div class="form-group">
+        <label data-i18n="loaderMaxWait">Loader idle max wait (ms)</label>
+        <input type="number" id="default-loader-max-wait" value="8000" min="1000" max="30000" step="500">
+      </div>
+
+      <div class="form-group">
+        <label data-i18n="pixelStabilityMaxWait">Pixel stability max wait (ms)</label>
+        <input type="number" id="default-pixel-stability-max-wait" value="8000" min="1000" max="30000" step="500">
+      </div>
     </div>
 
     <!-- Output Tab -->
